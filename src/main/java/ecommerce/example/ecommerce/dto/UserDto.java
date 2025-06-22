@@ -4,7 +4,7 @@ package ecommerce.example.ecommerce.dto;
 //import ecommerce.example.ecommerce.model.Order;
 import lombok.Data;
 
-import java.util.List;
+//import java.util.List;
 
 @Data
 public class UserDto {
@@ -12,7 +12,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private List<OrderDto> orders;
+    //private List<CartItemDto> orders;
     private CartDto cart;
 }
 
