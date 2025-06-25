@@ -42,13 +42,13 @@ public class CartController {
     }
 
     // GET /carts/{cartId}/total
-    @GetMapping("/{cartId}/total")
-    public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
-        try {
-            BigDecimal totalPrice = cartService.getTotalPrice(cartId);
-            return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
-    }
+    //@GetMapping("/{cartId}/total")
+    //public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
+      //  try {
+        //    BigDecimal totalPrice = cartService.getTotalPrice(cartId);
+          //  return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
+        //} catch (ResourceNotFoundException e) {
+          //  return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        //}
+    
 }
