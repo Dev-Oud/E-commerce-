@@ -12,25 +12,42 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity;
-    private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    private int quantity;
+
+    private BigDecimal price; // Total price for this line item (unit price * quantity)
+
+    @Column(nullable = false)
+    private String productName; // Snapshot of product name at time of purchase
+
+    @Column(nullable = false)
+    private BigDecimal productPriceAtPurchase; // Snapshot of unit price at purchase
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public OrderItem(Order order, Product product, int quantity, BigDecimal price) {
+    public OrderItem(
+            Order order,
+            Product product,
+            int quantity,
+            BigDecimal price,
+            String productName,
+            BigDecimal productPriceAtPurchase
+    ) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
         this.price = price;
-
+        this.productName = productName;
+        this.productPriceAtPurchase = productPriceAtPurchase;
     }
 }

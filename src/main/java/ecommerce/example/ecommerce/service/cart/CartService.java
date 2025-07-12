@@ -2,8 +2,10 @@ package ecommerce.example.ecommerce.service.cart;
 
 import ecommerce.example.ecommerce.exception.ResourceNotFoundException;
 import ecommerce.example.ecommerce.model.Cart;
+import ecommerce.example.ecommerce.model.User;
 import ecommerce.example.ecommerce.repository.CartItemRepository;
 import ecommerce.example.ecommerce.repository.CartRepository;
+import ecommerce.example.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ public class CartService implements ICartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Cart getCart(Long id) {
@@ -47,5 +50,19 @@ public class CartService implements ICartService {
     @Override
     public Cart getCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId);
+    }
+
+    //   getOrCreateUserCart
+    @Override
+    public Cart getOrCreateUserCart(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+        if (cart != null) {
+            return cart;
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Cart newCart = new Cart();
+        newCart.setUser(user);
+        return cartRepository.save(newCart);
     }
 }
