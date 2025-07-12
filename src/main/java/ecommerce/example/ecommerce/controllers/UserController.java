@@ -7,22 +7,29 @@ import ecommerce.example.ecommerce.model.User;
 import ecommerce.example.ecommerce.request.CreateUserRequest;
 import ecommerce.example.ecommerce.request.UserUpdateRequest;
 import ecommerce.example.ecommerce.response.ApiResponse;
+import ecommerce.example.ecommerce.security.UserDetailsImpl;
 import ecommerce.example.ecommerce.service.user.IUserService;
-//import ecommerce.example.ecommerce.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final IUserService userService;
 
+    //  Users can only view their own profile unless ADMIN
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
+    @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId,
+                                                   @AuthenticationPrincipal UserDetailsImpl currentUser) {
         try {
             User user = userService.getUserById(userId);
             UserDto userDto = userService.convertUserToDto(user);
@@ -33,6 +40,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> createUser(@RequestBody CreateUserRequest request) {
         try {
             User user = userService.createUser(request);
@@ -43,8 +51,11 @@ public class UserController {
         }
     }
 
+    //  Only the user or an admin can update
     @PutMapping("/{userId}")
-    public ResponseEntity<ApiResponse> updateUser(@RequestBody UserUpdateRequest request, @PathVariable Long userId) {
+    @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> updateUser(@RequestBody UserUpdateRequest request,
+                                                  @PathVariable Long userId) {
         try {
             User user = userService.updateUser(request, userId);
             UserDto userDto = userService.convertUserToDto(user);
@@ -54,7 +65,9 @@ public class UserController {
         }
     }
 
+    //  Only the user or an admin can delete
     @DeleteMapping("/{userId}")
+    @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
         try {
             userService.deleteUser(userId);

@@ -31,7 +31,7 @@ public class CategoryController {
         }
     }
 
-    // POST /categories
+    // POST categories
     @PostMapping
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
         try {
@@ -42,7 +42,7 @@ public class CategoryController {
         }
     }
 
-    // GET /categories/{id}
+    // GET categories
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
@@ -64,7 +64,7 @@ public class CategoryController {
         }
     }
 
-    // DELETE /categories/{id}
+    // DELETE categories
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
@@ -75,7 +75,7 @@ public class CategoryController {
         }
     }
 
-    // PUT /categories/{id}
+    // PUT categories
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {

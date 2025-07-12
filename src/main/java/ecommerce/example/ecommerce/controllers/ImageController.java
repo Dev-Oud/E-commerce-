@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,8 @@ public class ImageController {
 
     private final IImageService imageService;
 
-    // POST /images?productId=1
+    //  Admin POST images
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files,
                                                   @RequestParam Long productId) {
@@ -40,7 +42,7 @@ public class ImageController {
         }
     }
 
-    // GET /images/{id}/download
+    //  GET images download
     @GetMapping("/{imageId}/download")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
@@ -53,7 +55,8 @@ public class ImageController {
                 .body(resource);
     }
 
-    // PUT /images/{id}
+    // Admin   PUT images
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,
                                                    @RequestBody MultipartFile file) {
@@ -70,7 +73,8 @@ public class ImageController {
         }
     }
 
-    // DELETE /images/{id}
+    //  Admin DELETE images
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
