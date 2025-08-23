@@ -1,5 +1,6 @@
 package ecommerce.example.ecommerce.service.cart;
 
+import ecommerce.example.ecommerce.exception.InsufficientStockException;
 import ecommerce.example.ecommerce.exception.ResourceNotFoundException;
 import ecommerce.example.ecommerce.model.Cart;
 import ecommerce.example.ecommerce.model.CartItem;
@@ -22,7 +23,7 @@ public class CartItemService implements ICartItemService {
     private final ICartService cartService;
 
     @Override
-    public void addItemToCart(Long cartId, Long productId, int quantity) {
+    public void addItemToCart(Long cartId, Long productId, int quantity) throws InsufficientStockException {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
 
@@ -37,7 +38,7 @@ public class CartItemService implements ICartItemService {
                 : quantity;
 
         if (product.getInventory() < totalRequestedQty) {
-            throw new RuntimeException("Insufficient stock. Available: " + product.getInventory());
+            throw new InsufficientStockException("Insufficient stock. Available: " + product.getInventory());
         }
 
         CartItem cartItem = existingCartItem != null ? existingCartItem : new CartItem();
@@ -87,7 +88,7 @@ public class CartItemService implements ICartItemService {
     }
 
     @Override
-    public CartItem getCartItem(Long cartId, Long productId) {
+    public CartItem getCartItem(Long cartId, Long productId) throws ResourceNotFoundException {
         Cart cart = cartService.getCart(cartId);
         return cart.getItems()
                 .stream()
