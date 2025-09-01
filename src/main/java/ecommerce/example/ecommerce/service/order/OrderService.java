@@ -3,6 +3,7 @@ package ecommerce.example.ecommerce.service.order;
 import ecommerce.example.ecommerce.dto.OrderDto;
 import ecommerce.example.ecommerce.enums.OrderStatus;
 import ecommerce.example.ecommerce.exception.ResourceNotFoundException;
+import ecommerce.example.ecommerce.exception.InsufficientStockException; // ✅ NEW
 import ecommerce.example.ecommerce.model.Cart;
 import ecommerce.example.ecommerce.model.Order;
 import ecommerce.example.ecommerce.model.OrderItem;
@@ -64,7 +65,14 @@ public class OrderService implements IOrderService {
         return cart.getItems().stream().map(cartItem -> {
             Product product = cartItem.getProduct();
 
-            // Decrease inventory
+            // ✅ Stock validation
+            if (product.getInventory() < cartItem.getQuantity()) {
+                throw new InsufficientStockException(
+                        "Not enough stock available for product: " + product.getName()
+                );
+            }
+
+            // Decrease inventory if enough stock
             product.setInventory(product.getInventory() - cartItem.getQuantity());
             productRepository.save(product);
 

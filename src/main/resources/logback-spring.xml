@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Console Appender with JSON encoder -->
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Timestamp -->
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+
+                <!-- Log level -->
+                <level />
+
+                <!-- Logger name -->
+                <loggerName />
+
+                <!-- Thread name -->
+                <threadName />
+
+                <!-- Actual log message -->
+                <message />
+
+                <!-- Exception stacktrace if any -->
+                <stackTrace />
+
+                <!-- Extra fields (you can enrich logs later programmatically) -->
+                <mdc />
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="JSON_CONSOLE"/>
+    </root>
+
+</configuration>

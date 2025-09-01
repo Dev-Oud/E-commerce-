@@ -30,8 +30,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register", "/auth/login").permitAll() // Public endpoints
+                .requestMatchers("/auth/register", "/auth/login").permitAll() 
+                .requestMatchers("/actuator/health").permitAll()// Public endpoints
                 .anyRequest().authenticated() // All others require auth + @PreAuthorize for role
+                
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

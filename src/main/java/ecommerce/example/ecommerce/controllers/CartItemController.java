@@ -1,7 +1,6 @@
 package ecommerce.example.ecommerce.controllers;
 
 import ecommerce.example.ecommerce.exception.ResourceNotFoundException;
-import ecommerce.example.ecommerce.model.Cart;
 import ecommerce.example.ecommerce.model.User;
 import ecommerce.example.ecommerce.response.ApiResponse;
 import ecommerce.example.ecommerce.security.UserDetailsImpl;
@@ -9,6 +8,7 @@ import ecommerce.example.ecommerce.service.cart.ICartItemService;
 import ecommerce.example.ecommerce.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +24,18 @@ public class CartItemController {
 
     // POST cartItems
     @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()") // only logged-in users can add items
     public ResponseEntity<ApiResponse> addItemToCart(
             @RequestParam Long productId,
             @RequestParam Integer quantity,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             User user = userDetails.getUser();
-            Cart cart = cartService.getOrCreateUserCart(user.getId());
-            cartItemService.addItemToCart(cart.getId(), productId, quantity);
+            cartItemService.addItemToCart(
+                    cartService.getOrCreateUserCart(user.getId()).getId(),
+                    productId,
+                    quantity
+            );
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -40,13 +44,16 @@ public class CartItemController {
 
     // DELETE cartItems
     @DeleteMapping("/{itemId}")
+    @PreAuthorize("isAuthenticated()") // only logged-in users can remove items
     public ResponseEntity<ApiResponse> removeItemFromCart(
             @PathVariable Long itemId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             User user = userDetails.getUser();
-            Cart cart = cartService.getOrCreateUserCart(user.getId());
-            cartItemService.removeItemFromCart(cart.getId(), itemId);
+            cartItemService.removeItemFromCart(
+                    cartService.getOrCreateUserCart(user.getId()).getId(),
+                    itemId
+            );
             return ResponseEntity.ok(new ApiResponse("Remove Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
@@ -55,14 +62,18 @@ public class CartItemController {
 
     // PUT cartItems
     @PutMapping("/{itemId}")
+    @PreAuthorize("isAuthenticated()") // only logged-in users can update items
     public ResponseEntity<ApiResponse> updateItemQuantity(
             @PathVariable Long itemId,
             @RequestParam Integer quantity,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             User user = userDetails.getUser();
-            Cart cart = cartService.getOrCreateUserCart(user.getId());
-            cartItemService.updateItemQuantity(cart.getId(), itemId, quantity);
+            cartItemService.updateItemQuantity(
+                    cartService.getOrCreateUserCart(user.getId()).getId(),
+                    itemId,
+                    quantity
+            );
             return ResponseEntity.ok(new ApiResponse("Update Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

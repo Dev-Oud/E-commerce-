@@ -7,6 +7,7 @@ import ecommerce.example.ecommerce.response.ApiResponse;
 import ecommerce.example.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class CategoryController {
 
     private final ICategoryService categoryService;
 
-    // GET /categories
+    // GET /categories (public)
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {
@@ -31,8 +32,9 @@ public class CategoryController {
         }
     }
 
-    // POST categories
+    // POST categories (admin only)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
         try {
             Category newCategory = categoryService.addCategory(category);
@@ -42,7 +44,7 @@ public class CategoryController {
         }
     }
 
-    // GET categories
+    // GET categories/{id} (public)
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
@@ -53,7 +55,7 @@ public class CategoryController {
         }
     }
 
-    // GET /categories/name/{name}
+    // GET /categories/name/{name} (public)
     @GetMapping("/name/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         try {
@@ -64,8 +66,9 @@ public class CategoryController {
         }
     }
 
-    // DELETE categories
+    // DELETE categories/{id} (admin only)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategoryById(id);
@@ -75,8 +78,9 @@ public class CategoryController {
         }
     }
 
-    // PUT categories
+    // PUT categories/{id} (admin only)
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {
             Category updatedCategory = categoryService.updateCategory(category, id);
