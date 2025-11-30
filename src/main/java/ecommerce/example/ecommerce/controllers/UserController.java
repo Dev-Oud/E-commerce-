@@ -25,7 +25,6 @@ public class UserController {
 
     private final IUserService userService;
 
-    //  Users can only view their own profile unless ADMIN
     @GetMapping("/{userId}")
     @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId,
@@ -50,8 +49,6 @@ public class UserController {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
-    //  Only the user or an admin can update
     @PutMapping("/{userId}")
     @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UserUpdateRequest request,
@@ -65,7 +62,6 @@ public class UserController {
         }
     }
 
-    //  Only the user or an admin can delete
     @DeleteMapping("/{userId}")
     @PreAuthorize("#userId == principal.user.id or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId) {

@@ -35,11 +35,9 @@ public class OrderService implements IOrderService {
     public Order placeOrder(Long userId, CheckoutRequest request) {
         Cart cart = cartService.getCartByUserId(userId);
         Order order = createOrder(cart, request);
-
         List<OrderItem> orderItemList = createOrderItems(order, cart);
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
-
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(cart.getId());
         return savedOrder;
@@ -50,8 +48,6 @@ public class OrderService implements IOrderService {
         order.setUser(cart.getUser());
         order.setOrderStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDate.now());
-
-        // Shipping & recipient details
         order.setShippingAddress(request.getShippingAddress());
         order.setShippingCity(request.getShippingCity());
         order.setShippingCountry(request.getShippingCountry());
@@ -64,26 +60,20 @@ public class OrderService implements IOrderService {
     private List<OrderItem> createOrderItems(Order order, Cart cart) {
         return cart.getItems().stream().map(cartItem -> {
             Product product = cartItem.getProduct();
-
-            // ✅ Stock validation
             if (product.getInventory() < cartItem.getQuantity()) {
                 throw new InsufficientStockException(
                         "Not enough stock available for product: " + product.getName()
                 );
             }
-
-            // Decrease inventory if enough stock
             product.setInventory(product.getInventory() - cartItem.getQuantity());
             productRepository.save(product);
-
-            // Create OrderItem with snapshot data
             return new OrderItem(
                     order,
                     product,
                     cartItem.getQuantity(),
                     cartItem.getUnitPrice(),
-                    product.getName(),                  // productName snapshot
-                    product.getPrice()                  // productPriceAtPurchase snapshot
+                    product.getName(),                  
+                    product.getPrice()                  
             );
         }).toList();
     }

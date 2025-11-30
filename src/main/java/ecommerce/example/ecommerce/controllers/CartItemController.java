@@ -22,9 +22,9 @@ public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
 
-    // POST cartItems
+    // Post cartItems
     @PostMapping("/add")
-    @PreAuthorize("isAuthenticated()") // only logged-in users can add items
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse> addItemToCart(
             @RequestParam Long productId,
             @RequestParam Integer quantity,
@@ -42,9 +42,9 @@ public class CartItemController {
         }
     }
 
-    // DELETE cartItems
+    // Delete cartItems
     @DeleteMapping("/{itemId}")
-    @PreAuthorize("isAuthenticated()") // only logged-in users can remove items
+    @PreAuthorize("isAuthenticated()") 
     public ResponseEntity<ApiResponse> removeItemFromCart(
             @PathVariable Long itemId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -60,9 +60,9 @@ public class CartItemController {
         }
     }
 
-    // PUT cartItems
+    // Put cartItems
     @PutMapping("/{itemId}")
-    @PreAuthorize("isAuthenticated()") // only logged-in users can update items
+    @PreAuthorize("isAuthenticated()") 
     public ResponseEntity<ApiResponse> updateItemQuantity(
             @PathVariable Long itemId,
             @RequestParam Integer quantity,

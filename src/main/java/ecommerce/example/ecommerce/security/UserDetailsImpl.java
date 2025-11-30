@@ -12,8 +12,6 @@ import java.util.Collections;
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
-
-    // ✅ Expose the User entity
     public User getUser() {
         return user;
     }

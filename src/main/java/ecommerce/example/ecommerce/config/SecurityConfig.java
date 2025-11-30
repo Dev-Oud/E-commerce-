@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
-@EnableMethodSecurity // Enables @PreAuthorize annotations
+@EnableMethodSecurity 
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
@@ -31,8 +31,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/register", "/auth/login").permitAll() 
-                .requestMatchers("/actuator/health").permitAll()// Public endpoints
-                .anyRequest().authenticated() // All others require auth + @PreAuthorize for role
+                .requestMatchers("/actuator/health").permitAll()
+                .anyRequest().authenticated() 
                 
             )
             .authenticationProvider(authenticationProvider())

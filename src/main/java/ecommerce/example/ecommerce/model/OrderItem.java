@@ -19,13 +19,12 @@ public class OrderItem {
 
     private int quantity;
 
-    private BigDecimal price; // Total price for this line item (unit price * quantity)
+    private BigDecimal price; 
+    @Column(nullable = false)
+    private String productName; 
 
     @Column(nullable = false)
-    private String productName; // Snapshot of product name at time of purchase
-
-    @Column(nullable = false)
-    private BigDecimal productPriceAtPurchase; // Snapshot of unit price at purchase
+    private BigDecimal productPriceAtPurchase; 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)

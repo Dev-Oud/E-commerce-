@@ -43,7 +43,7 @@ public class CartService implements ICartService {
 
     @Override
     public Long initializeNewCart() {
-        Cart newCart = new Cart(); // Let JPA auto-generate the ID
+        Cart newCart = new Cart(); 
         return cartRepository.save(newCart).getId();
     }
 
@@ -52,7 +52,6 @@ public class CartService implements ICartService {
         return cartRepository.findByUserId(userId);
     }
 
-    //   getOrCreateUserCart
     @Override
     public Cart getOrCreateUserCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId);

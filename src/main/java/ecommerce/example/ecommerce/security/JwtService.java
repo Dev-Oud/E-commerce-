@@ -13,16 +13,15 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 day
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; 
 
-    // ✅ Use a fixed 256-bit secret key (at least 32 characters)
     private static final String SECRET = "your-very-secure-and-long-secret-key!";
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("role", "USER") // Optionally replace with user.getRole()
+                .claim("role", "USER") 
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)

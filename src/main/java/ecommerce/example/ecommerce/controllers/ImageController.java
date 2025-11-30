@@ -28,7 +28,7 @@ public class ImageController {
 
     private final IImageService imageService;
 
-    //  Admin POST images
+    
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files,
@@ -42,7 +42,6 @@ public class ImageController {
         }
     }
 
-    //  GET images download
     @GetMapping("/{imageId}/download")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
@@ -55,13 +54,13 @@ public class ImageController {
                 .body(resource);
     }
 
-    // Admin   PUT images
+   
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,
                                                    @RequestBody MultipartFile file) {
         try {
-            imageService.getImageById(imageId); // will throw if not found
+            imageService.getImageById(imageId); 
             imageService.updateImage(file, imageId);
             return ResponseEntity.ok(new ApiResponse("Update success!", null));
         } catch (ResourceNotFoundException e) {
@@ -73,12 +72,11 @@ public class ImageController {
         }
     }
 
-    //  Admin DELETE images
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
-            imageService.getImageById(imageId); // will throw if not found
+            imageService.getImageById(imageId); 
             imageService.deleteImageById(imageId);
             return ResponseEntity.ok(new ApiResponse("Delete success!", null));
         } catch (ResourceNotFoundException e) {

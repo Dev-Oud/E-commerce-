@@ -19,39 +19,23 @@ This is a backend service for an eCommerce web application, built using Spring B
 * No authentication mechanism is implemented yet (to be added later).
 * Carts and Users are loosely coupled for now, can be associated later.
 
----
-
-//Expectations
-
-* Clean code structure using service-repository pattern
-* Consistent API responses using `ApiResponse` wrapper
-* Error handling through custom exceptions (e.g., `ResourceNotFoundException`)
-
 
 
 //API Endpoints
 
- User Endpoints
-
-| Method | Endpoint | Description         |
-| ------ | -------- | ------------------- |
-| POST   | `/users` | Register a new user |
+ 
 
  Cart Endpoints
+                              
+GET    `/carts/{cartId}`       
+DELETE  `/carts/{cartId}`           
+GET     `/carts/{cartId}/total`
 
-| Method | Endpoint                | Description                |
-| ------ | ----------------------- | -------------------------- |
-| GET    | `/carts/{cartId}`       | Retrieve a cart by ID      |
-| DELETE | `/carts/{cartId}`       | Clear and delete a cart    |
-| GET    | `/carts/{cartId}/total` | Get total amount of a cart |
-
- Cart Items Endpoints
-
-| Method | Endpoint                                      | Description                             |
-| ------ | --------------------------------------------- | --------------------------------------- |
-| POST   | `/cartItems/add?cartId=&productId=&quantity=` | Add item to cart (creates cart if null) |
-| DELETE | `/cartItems/{cartId}/{itemId}`                | Remove item from cart                   |
-| PUT    | `/cartItems/{cartId}/{itemId}?quantity=`      | Update quantity of a cart item          |
+ Cart Items Endpoints:
+                                                                  
+POST    `/cartItems/add?cartId=&productId=&quantity=`
+DELETE  `/cartItems/{cartId}/{itemId}`                           |
+PUT     `/cartItems/{cartId}/{itemId}?quantity=`     
 
 
 

@@ -18,9 +18,9 @@ public class CartController {
 
     private final ICartService cartService;
 
-    //  GET carts (only owner can access)
+    //  Get carts 
     @GetMapping("/my-cart/{cartId}")
-    @PreAuthorize("#cartId == principal.user.id")  // ensures user only accesses their own cart
+    @PreAuthorize("#cartId == principal.user.id")  
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
@@ -30,9 +30,9 @@ public class CartController {
         }
     }
 
-    //  DELETE carts (only owner can clear)
+    //  Delete carts 
     @DeleteMapping("/{cartId}")
-    @PreAuthorize("#cartId == principal.user.id")  // ensures user only deletes their own cart
+    @PreAuthorize("#cartId == principal.user.id")  
     public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId) {
         try {
             cartService.clearCart(cartId);

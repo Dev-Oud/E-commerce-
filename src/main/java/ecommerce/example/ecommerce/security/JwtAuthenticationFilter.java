@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = header.substring(7).trim();
 
-        // Defensive check: make sure token has exactly 3 parts (header.payload.signature)
         if (token.split("\\.").length != 3) {
             System.out.println("Invalid JWT format received: " + token);
             filterChain.doFilter(request, response);
@@ -57,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception ex) {
-            // Optional: Log or handle token parse error
             System.out.println("JWT parse failed: " + ex.getMessage());
         }
 

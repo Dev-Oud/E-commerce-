@@ -21,7 +21,7 @@ public class CategoryController {
 
     private final ICategoryService categoryService;
 
-    // GET /categories (public)
+    // Get categories 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {
@@ -32,7 +32,7 @@ public class CategoryController {
         }
     }
 
-    // POST categories (admin only)
+    // Post categories 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
@@ -44,7 +44,7 @@ public class CategoryController {
         }
     }
 
-    // GET categories/{id} (public)
+    // Get categories
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
@@ -55,7 +55,7 @@ public class CategoryController {
         }
     }
 
-    // GET /categories/name/{name} (public)
+    // Get categories
     @GetMapping("/name/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         try {
@@ -66,7 +66,7 @@ public class CategoryController {
         }
     }
 
-    // DELETE categories/{id} (admin only)
+    // Delete categories
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
@@ -78,7 +78,7 @@ public class CategoryController {
         }
     }
 
-    // PUT categories/{id} (admin only)
+    // Put categories
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {

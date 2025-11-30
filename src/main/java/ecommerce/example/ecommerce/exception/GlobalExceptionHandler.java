@@ -13,7 +13,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Utility method to build response body
     private ResponseEntity<Object> buildResponse(Exception ex, WebRequest request, HttpStatus status) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -24,31 +23,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, status);
     }
 
-    // Handle all uncaught exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // Handle insufficient stock
     @ExceptionHandler(InsufficientStockException.class)
     public ResponseEntity<Object> handleStockException(InsufficientStockException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
-
-    // Handle product not found
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Object> handleProductNotFound(ProductNotFoundException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.NOT_FOUND);
     }
 
-    // Handle already exists (e.g., duplicate)
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<Object> handleAlreadyExists(AlreadyExistsException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.CONFLICT);
     }
-
-    // Handle generic resource not found
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
         return buildResponse(ex, request, HttpStatus.NOT_FOUND);

@@ -22,7 +22,7 @@ public class OrderController {
 
     private final IOrderService orderService;
 
-    //  POST orders checkout
+
     @PostMapping
     public ResponseEntity<ApiResponse> createOrder(
             @RequestBody CheckoutRequest request,
@@ -40,7 +40,6 @@ public class OrderController {
         }
     }
 
-    //  GET orders
     @GetMapping("/{orderId}")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId, Authentication authentication) {
         try {
@@ -60,7 +59,6 @@ public class OrderController {
         }
     }
 
-    //  GET  user order history
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getUserOrders(@PathVariable Long userId, Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

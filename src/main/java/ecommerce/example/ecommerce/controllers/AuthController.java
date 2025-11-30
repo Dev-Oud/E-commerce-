@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final IUserService userService; // ✅ Use interface
+    private final IUserService userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 

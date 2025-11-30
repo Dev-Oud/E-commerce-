@@ -26,7 +26,6 @@ public class CartItemService implements ICartItemService {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
 
-        // Check if product stock is available
         CartItem existingCartItem = cart.getItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
