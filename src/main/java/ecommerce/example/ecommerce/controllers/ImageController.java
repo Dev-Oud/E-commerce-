@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,8 @@ public class ImageController {
 
     private final IImageService imageService;
 
-    // POST /images?productId=1
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files,
                                                   @RequestParam Long productId) {
@@ -40,7 +42,6 @@ public class ImageController {
         }
     }
 
-    // GET /images/{id}/download
     @GetMapping("/{imageId}/download")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         Image image = imageService.getImageById(imageId);
@@ -53,12 +54,13 @@ public class ImageController {
                 .body(resource);
     }
 
-    // PUT /images/{id}
+   
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId,
                                                    @RequestBody MultipartFile file) {
         try {
-            imageService.getImageById(imageId); // will throw if not found
+            imageService.getImageById(imageId); 
             imageService.updateImage(file, imageId);
             return ResponseEntity.ok(new ApiResponse("Update success!", null));
         } catch (ResourceNotFoundException e) {
@@ -70,11 +72,11 @@ public class ImageController {
         }
     }
 
-    // DELETE /images/{id}
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
-            imageService.getImageById(imageId); // will throw if not found
+            imageService.getImageById(imageId); 
             imageService.deleteImageById(imageId);
             return ResponseEntity.ok(new ApiResponse("Delete success!", null));
         } catch (ResourceNotFoundException e) {

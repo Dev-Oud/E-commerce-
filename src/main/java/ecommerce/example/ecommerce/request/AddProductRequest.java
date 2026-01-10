@@ -1,9 +1,6 @@
 package ecommerce.example.ecommerce.request;
 
 import ecommerce.example.ecommerce.model.Category;
-//import jakarta.persistence.CascadeType;
-//import jakarta.persistence.JoinColumn;
-//import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 import java.math.BigDecimal;

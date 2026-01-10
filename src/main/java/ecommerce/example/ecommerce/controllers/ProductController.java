@@ -1,6 +1,5 @@
 package ecommerce.example.ecommerce.controllers;
 
-
 import ecommerce.example.ecommerce.dto.ProductDto;
 import ecommerce.example.ecommerce.exception.ResourceNotFoundException;
 import ecommerce.example.ecommerce.model.Product;
@@ -10,16 +9,19 @@ import ecommerce.example.ecommerce.response.ApiResponse;
 import ecommerce.example.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
     private final IProductService productService;
 
     @GetMapping
@@ -41,6 +43,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
             Product theProduct = productService.addProduct(product);
@@ -52,6 +55,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
         try {
             Product theProduct = productService.updateProduct(request, productId);
@@ -63,6 +67,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
             productService.deleteProductById(productId);

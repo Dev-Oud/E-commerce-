@@ -6,9 +6,8 @@ import ecommerce.example.ecommerce.response.ApiResponse;
 import ecommerce.example.ecommerce.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -19,8 +18,9 @@ public class CartController {
 
     private final ICartService cartService;
 
-    // GET /carts/{cartId}
-    @GetMapping("/{cartId}")
+    //  Get carts 
+    @GetMapping("/my-cart/{cartId}")
+    @PreAuthorize("#cartId == principal.user.id")  
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
@@ -30,8 +30,9 @@ public class CartController {
         }
     }
 
-    // DELETE /carts/{cartId}
+    //  Delete carts 
     @DeleteMapping("/{cartId}")
+    @PreAuthorize("#cartId == principal.user.id")  
     public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId) {
         try {
             cartService.clearCart(cartId);
@@ -40,15 +41,4 @@ public class CartController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
-
-    // GET /carts/{cartId}/total
-    //@GetMapping("/{cartId}/total")
-    //public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
-      //  try {
-        //    BigDecimal totalPrice = cartService.getTotalPrice(cartId);
-          //  return ResponseEntity.ok(new ApiResponse("Total Price", totalPrice));
-        //} catch (ResourceNotFoundException e) {
-          //  return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        //}
-    
 }

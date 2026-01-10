@@ -1,7 +1,5 @@
 package ecommerce.example.ecommerce.dto;
 
-//import ecommerce.example.ecommerce.model.Cart;
-//import ecommerce.example.ecommerce.model.Order;
 import lombok.Data;
 
 import java.util.List;
